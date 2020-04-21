@@ -31,5 +31,56 @@ window.addEventListener('DOMContentLoaded', function () {
                 }
             }
         }
-    })
+    });
+
+    let deadline = '2020-04-21:12:21:00';
+
+    function getTimeRemaining(endTime) {
+        let conv = new Date(endTime),
+            t = new Date(conv.getTime() - Date.now()),
+            days = t.getUTCDate() - 1,
+            seconds = t.getUTCSeconds(),
+            minutes = t.getUTCMinutes(),
+            hours = t.getUTCHours();
+        return {
+            'total': t,
+            'days': days,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        };
+    };
+
+    function setClock(id, endTime) {
+        let timer = document.getElementById(id),
+            days = timer.querySelector('.days'),
+            hours = timer.querySelector('.hours'),
+            minutes = timer.querySelector('.minutes'),
+            seconds = timer.querySelector('.seconds'),
+            timeInterval = setInterval(updateClock, 1000);
+        function updateClock() {
+            let t = getTimeRemaining(endTime);
+            days.textContent = t.days >= 10 ? t.days : '0' + t.days;
+            hours.textContent = t.hours >= 10 ? t.hours : '0' + t.hours;
+            minutes.textContent = t.minutes >= 10 ? t.minutes : '0' + t.minutes;;
+            seconds.textContent = t.seconds >= 10 ? t.seconds : '0' + t.seconds;;
+            if (t.total <= 0) {               
+                clearInterval(timeInterval);
+                days.textContent = '00', hours.textContent = '00', minutes.textContent = '00', seconds.textContent = '00';
+            };
+        };
+    };
+    function setDate(id, endTime) {
+        let timer = document.getElementById(id),
+            day = timer.querySelector('.day'),
+            month = timer.querySelector('.month'),
+            year = timer.querySelector('.year'),
+            date = new Date(endTime);
+
+        day.textContent = date.getDate();
+        month.textContent = date.getMonth() >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1);
+        year.textContent = date.getFullYear();
+    };
+    setDate('lastDay', deadline);
+    setClock('timer', deadline);
 })
